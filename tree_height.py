@@ -2,37 +2,26 @@
 
 import sys
 import threading
-import re
 import numpy as np
-
+import re
 
 def compute_height(n, parents):
     # Write this function
-    check = True
     backlog = []
-    iterator = 0
     max_height = 0
     lastRemembered = 0
     for i in range(parents.size):
         if -1 == parents[i]:
-            root = i;
-    while check:
-        backlogbool = list(map(lambda x: x == root, parents))
+            root = i
+    for i in range(int(n)-1):
+        backlogbool = list(map(lambda xx: xx == root, parents))
         for x in range(len(backlogbool)):
             if backlogbool[x]:
                 backlog.append(x)
+        if len(backlog) >= lastRemembered:
+            max_height = max_height + 1
+            lastRemembered = len(backlog)
         root = backlog.pop()
-        iterator = iterator +1
-        if max_height < iterator:
-            max_height = iterator
-        if not backlog:
-            check = False
-        if len(backlog) > lastRemembered:
-            lastRemembered = len(backlog)
-            savedIterator = iterator
-        if lastRemembered > len(backlog):
-            lastRemembered = len(backlog)
-            iterator = savedIterator
     # Your code here
     return max_height
 
