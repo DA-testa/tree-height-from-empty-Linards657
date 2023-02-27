@@ -9,22 +9,19 @@ import numpy as np
 def iteration(i, parents, root):
     global newMax
     backlog = np.where(parents == root)[0]
-    if backlog.any():
-        i = i + 1
-        for x in range(len(backlog)):
-            if int(iteration(i, parents, backlog[x]) or 0) > newMax:
-                newMax = iteration(i, parents, backlog[x])
+    i = i + 1
+    for x, value in enumerate(backlog):
+        iteration(i, parents, backlog[x])
+    if i > newMax:
+        newMax = i
     else:
-        return i
+        return
 
 
 def compute_height(n, parents):
     # Write this function
-    max_height = 1
-    lastRemembered = 0
-    for i in range(parents.size):
-        if -1 == parents[i]:
-            root = i
+    max_height = 0
+    root = np.where(parents == -1)[0]
     iteration(max_height, parents, root)
     # Your code here
     return newMax
@@ -37,14 +34,14 @@ def main():
     text = input()
     if "I" in text[:1]:
         count = input()
-        array = np.asarray(list(map(int, (input().split()))))
+        array = np.asarray(list(map(int, input().split())))
         print(compute_height(count, array))
     else:
         text = input()
         if not re.search("^a", text):
             f = open("./test/" + text, "r")
             count = f.readline()
-            array = np.asarray(list(map(int, (f.readline().split()))))
+            array = np.asarray(list(map(int, f.readline().split())))
             f.close()
             print(compute_height(count, array))
 
